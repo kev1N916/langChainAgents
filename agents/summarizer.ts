@@ -1,14 +1,13 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { sendEmail } from "./tools/agent_tools";
 import {loadInstructionFromFile} from "../util/loadPrompt";
 const model = new ChatOpenAI({ modelName: "gpt-4o" });
 
-const notificationSenderAgent = createReactAgent({
+const summarizerAgent = createReactAgent({
   llm: model,
-  tools: [sendEmail],
-  name: "notifier",
-  prompt: loadInstructionFromFile("notification_sender_prompt.txt"),
+  tools: [],
+  name: "summarizer",
+  prompt: loadInstructionFromFile("summarizer_prompt.txt"),
 });
 
-export { notificationSenderAgent };
+export { summarizerAgent };

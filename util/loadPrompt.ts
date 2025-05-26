@@ -24,3 +24,5 @@ function loadInstructionFromFile(filename: string, defaultInstruction: string = 
 
     return instruction;
 }
+
+export {loadInstructionFromFile}
