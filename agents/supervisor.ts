@@ -1,12 +1,22 @@
-import { ChatOpenAI } from "@langchain/openai";
 import { createSupervisor } from "@langchain/langgraph-supervisor";
 import { jiraInteractorAgent } from "./jira_interactor";
 import { summarizerAgent } from "./summarizer";
 import { notificationSenderAgent } from "./notification_sender";
 import { loadInstructionFromFile } from "../util/loadPrompt";
-// Create supervisor workflow
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import dotenv from "dotenv";
 
-const model = new ChatOpenAI({ modelName: "gpt-4o" });
+dotenv.config();
+
+// Ensure GOOGLE_API_KEY is loaded from environment variables
+const googleApiKey = process.env.GOOGLE_API_KEY;
+
+// Initialize the Gemini 2.0 Flash model
+const model = new ChatGoogleGenerativeAI({
+  model: "gemini-2.0-flash", // Specify the Gemini 2.0 Flash model
+  apiKey: googleApiKey, // Pass the API key loaded from environment variables
+});
+
 const supervisor = createSupervisor({
     agents: [jiraInteractorAgent, notificationSenderAgent,summarizerAgent],
     llm: model,
