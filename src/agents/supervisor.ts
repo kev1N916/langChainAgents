@@ -20,6 +20,7 @@ const model = new ChatGoogleGenerativeAI({
 const supervisor = createSupervisor({
     agents: [jiraInteractorAgent, notificationSenderAgent,summarizerAgent],
     llm: model,
+    outputMode: "full_history",
     prompt: loadInstructionFromFile("jira_supervisor_prompt.txt"),
     addHandoffBackMessages: true,
 });
