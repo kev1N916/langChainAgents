@@ -20,4 +20,5 @@ const summarizerAgent = createReactAgent({
   prompt: loadInstructionFromFile("summarizer_prompt.txt"),
 });
 
+// summarizerAgent.invoke()
 export { summarizerAgent };

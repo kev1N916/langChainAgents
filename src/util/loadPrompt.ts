@@ -9,16 +9,16 @@ import * as path from 'path';
  */
 function loadInstructionFromFile(filename: string, defaultInstruction: string = "Default instruction."): string {
     let instruction: string = defaultInstruction;
-
+        const filepath: string = path.join(__dirname,"prompts" ,filename);
     try {
-        const filepath: string = path.join(__dirname, filename);
+        console.log(`Attempting to load instruction from ${filepath}`);
         instruction = fs.readFileSync(filepath, 'utf-8');
         console.log(`Successfully loaded instruction from ${filename}`);
     } catch (error: any) {
         if (error.code === 'ENOENT') {
             console.warn(`WARNING: Instruction file not found: ${filename}. Using default.`);
         } else {
-            console.error(`ERROR loading instruction file ${filename}: ${error.message}. Using default.`);
+            console.error(`ERROR loing instruction file ${filename}: ${error.message}. Using default.`);
         }
     }
 

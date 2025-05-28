@@ -1,19 +1,33 @@
 {
-  "devDependencies": {
-    "@types/jira-client": "^7.1.9",
-    "@types/node": "^22.15.21",
-    "@types/nodemailer": "^6.4.17",
-    "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "@langchain/anthropic": "^0.3.21",
-    "@langchain/google-genai": "^0.2.9",
-    "@langchain/langgraph": "^0.2.73",
-    "@langchain/langgraph-supervisor": "^0.0.12",
-    "@langchain/openai": "^0.5.11",
-    "@types/express": "^5.0.2",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "jira-client": "^8.2.2"
-  }
+    "name": "langchain_agent",
+    "version": "1.0.0",
+    "description": "Langchain Automation Agent",
+    "author": "Kevin",
+    "main": "./lib/server.js",
+    "scripts": {
+        "build": "tsc --build",
+        "lint": "eslint -c .eslintrc.js --ext .ts src",
+        "start": "tsc --build && nodemon ./lib/server.js",
+        "dev": "nodemon --watch src --ext ts src/server.ts"    
+      },
+    "devDependencies": {
+        "@types/jira-client": "^7.1.9",
+        "@types/node": "^22.15.21",
+        "@types/nodemailer": "^6.4.17",
+        "nodemon": "^3.1.10",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "@langchain/anthropic": "^0.3.21",
+        "@langchain/google-genai": "^0.2.9",
+        "@langchain/langgraph": "^0.2.73",
+        "@langchain/langgraph-supervisor": "^0.0.12",
+        "@langchain/openai": "^0.5.11",
+        "@types/express": "^5.0.2",
+        "dotenv": "^16.5.0",
+        "express": "^5.1.0",
+        "jira-client": "^8.2.2",
+        "nodemailer": "^7.0.3"
+    }
 }

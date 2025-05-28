@@ -42,7 +42,7 @@ const sendEmail = new DynamicStructuredTool({
     schema: z.object({
         subject: z.string().describe("The subject of the email"),
         recipient: z.string().describe("The email address of the recipient"),
-        body: z.string().describe("The body content of the email")
+        body: z.string().describe("The body content of the email which is a plain text.")
     }),
     func: async ({ subject, recipient, body }) => {
         try {

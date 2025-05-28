@@ -1,0 +1,6 @@
+Find all my Jira issues , summarize them, and send the summary to kevintj916@gmail.com with an appropriate subject which you can decide.
+
+Get a summary of all my open Jira issues and email it to kevintj916@gmail.com.
+
+First retrieve information related to my JIRA issues and comments for all my projects, summarize them and then send the summary to my mail at kevintj169@gmail.com with an appropriate subject of your choice. 
+MAKE A LOGICAL PLAN FOR SUB-AGENT INTERACTION FOR THIS AND THEN EXECUTE THE PLAN IN A PROPER ORDER WIHTOUT 
