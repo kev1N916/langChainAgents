@@ -1,10 +1,11 @@
 import { END, START, StateGraph } from "@langchain/langgraph";
 import { AppState } from "./appState";
-import { Runnable } from "@langchain/core/runnables";
-import { createTeamSupervisor } from "./createNode";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
+import { createSupervisor } from "./supervisor";
 import dotenv from "dotenv";
-import { notifierNode, jiraNode, } from "./createTeam";
+import { notifierNode } from "./notifierAgent";
+import { jiraNode } from "./jiraAgent";
+import { summarizerNode } from "./summarizer";
 dotenv.config();
 
 // everything seems alright here
@@ -20,26 +21,20 @@ const llm = new ChatGoogleGenerativeAI({
 
 const createGraph = async () => {
 
-        const supervisorAgent = await createTeamSupervisor(
-        llm,
-        "You are a supervisor tasked with managing a conversation between the" +
-        " following workers:  {team_members}. Given the following user request," +
-        " respond with the worker to act next. Each worker will perform a" +
-        " task and respond with their results and status. When finished," +
-        " respond with FINISH.\n\n" +
-        " Select strategically to minimize the number of steps taken.",
-        ["Jira", "Notifier"], // These are the worker names the supervisor will manage
-    );
+    const supervisorAgent = await createSupervisor(llm);
 
     const researchGraph = new StateGraph(AppState)
         .addNode("Notifier", notifierNode)
         .addNode("supervisor", supervisorAgent)
         .addNode("Jira", jiraNode)
+        .addNode("Summarizer", summarizerNode)
         .addEdge("Jira", "supervisor")
         .addEdge("Notifier", "supervisor")
+        .addEdge("Summarizer", "supervisor")
         .addConditionalEdges("supervisor", (x) => x.next, {
             Jira: "Jira",
             Notifier: "Notifier",
+            Summarizer: "Summarizer",
             FINISH: END,
         })
         .addEdge(START, "supervisor");

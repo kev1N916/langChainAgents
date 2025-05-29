@@ -9,6 +9,12 @@ interface Comment {
   body: string;
 }
 
+interface Sprint {
+  id: string;
+  name: string;
+  goal: string;
+
+}
 interface IssueSummary {
   summary: string;
   description: string;
@@ -92,6 +98,41 @@ export class JiraService {
       return {};
     }
   }
+
+
+  public async getSprints() {
+    const result: Record<string, Sprint> = {};
+
+
+    try {
+      const boards = await this.jira.getAllBoards();
+
+      for (const board of boards.values || []) {
+        const boardId = board.id;
+
+        const sprints = await this.jira.getAllSprints(boardId);
+
+        for (const sprint of sprints.values || []) {
+          console.log(sprint)
+          const sprintId = sprint.id;
+          const sprintName = sprint.name || 'N/A';
+          const sprintGoal = sprint.goal || 'N/A';
+          result[sprintName] = {
+            id: sprintId,
+            name: sprintName,
+            goal: sprintGoal
+          }
+        }
+      }
+
+      return result;
+    } catch (error) {
+      console.error("Failed to fetch JIRA data:", error);
+      return {};
+    }
+  }
+
+  // public async 
 }
 
 export default JiraService;

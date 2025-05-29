@@ -8,6 +8,7 @@ import { Runnable } from "@langchain/core/runnables";
 import { StructuredToolInterface } from "@langchain/core/tools";
 import { MessagesAnnotation } from "@langchain/langgraph";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { LanguageModelLike } from "@langchain/core/language_models/base";
 
 const agentStateModifier = (
   systemPrompt: string,
