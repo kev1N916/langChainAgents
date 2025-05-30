@@ -1,6 +1,6 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
 import { z } from "zod";
-import {JiraService} from "./jira_api";
+import {JiraService} from "./jiraService";
 import {MailSender} from "./mailSender";
 
 const jiraService=new JiraService()

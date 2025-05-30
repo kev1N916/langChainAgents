@@ -1,14 +1,7 @@
-import { z } from "zod";
 import { HumanMessage, BaseMessage, SystemMessage, AIMessage } from "@langchain/core/messages";
-import {
-  ChatPromptTemplate,
-  MessagesPlaceholder,
-} from "@langchain/core/prompts";
 import { Runnable } from "@langchain/core/runnables";
 import { StructuredToolInterface } from "@langchain/core/tools";
 import { MessagesAnnotation } from "@langchain/langgraph";
-import { BaseChatModel } from "@langchain/core/language_models/chat_models";
-import { LanguageModelLike } from "@langchain/core/language_models/base";
 
 const agentStateModifier = (
   systemPrompt: string,
@@ -46,57 +39,5 @@ async function runAgentNode(params: {
   };
 }
 
-async function createTeamSupervisor(
-  llm: BaseChatModel,
-  systemPrompt: string,
-  members: string[],
-): Promise<Runnable> {
-
-  const options = ["FINISH", ...members];
-
-  const routeTool = {
-    name: "route",
-    description: "Select the next role.",
-    schema: z.object({
-      reasoning: z.string(),
-      next: z.enum(["FINISH", ...members]),
-      instructions: z.string().describe("The specific instructions of the sub-task the next role should accomplish."),
-    })
-  }
-
-  let prompt = ChatPromptTemplate.fromMessages([
-    ["system", systemPrompt],
-    new MessagesPlaceholder("messages"),
-    [
-      "ai",
-      "Given the conversation above, who should act next? Or should we FINISH? Select one of: {options}",
-    ],
-  ]);
-
-  prompt = await prompt.partial({
-    options: options.join(", "),
-    team_members: members.join(", "),
-  });
-
-const supervisor = prompt
-    .pipe(
-      llm.bindTools([routeTool], {
-        tool_choice: "route",
-      }),
-    )
-    // Add a tap here to log x
-    .pipe((x) => {
-      return x as AIMessage
-    })
-    // select the first one
-    .pipe((x) => (
-     {
-      next: x.tool_calls[0].args.next,
-      instructions: x.tool_calls[0].args.instructions,
-    }));
-
-  return supervisor;
-}
-
-export { agentStateModifier, runAgentNode, createTeamSupervisor };
+export { agentStateModifier, runAgentNode };
 // export * from "./createNodes.js";

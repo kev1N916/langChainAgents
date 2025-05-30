@@ -1,4 +1,3 @@
-import { runAgentNode } from "./node";
 import { z } from "zod";
 import { AIMessage } from "@langchain/core/messages";
 import {
@@ -7,7 +6,8 @@ import {
 } from "@langchain/core/prompts";
 import { Runnable } from "@langchain/core/runnables";
 import { BaseChatModel } from "@langchain/core/language_models/chat_models";
-
+import { convertToOpenAITool } from "@langchain/core/utils/function_calling";
+import { ChatOpenAI } from "@langchain/openai";
 
 async function createTeamSupervisor(
   llm: BaseChatModel,
@@ -43,11 +43,10 @@ async function createTeamSupervisor(
 
 const supervisor = prompt
     .pipe(
-      llm.bindTools([routeTool], {
+      llm.bindTools([convertToOpenAITool(routeTool)], {
         tool_choice: "route",
       }),
     )
-    // Add a tap here to log x
     .pipe((x) => {
       return x as AIMessage
     })
@@ -69,9 +68,9 @@ const createSupervisor = async (llm: BaseChatModel): Promise<Runnable> => {
         " following workers:  {team_members}. Given the following user request," +
         " respond with the worker to act next. Each worker will perform a" +
         " task and respond with their results and status. When finished," +
-        " respond with FINISH.\n\n" +
+        " respond with FINISH. \n" +
         " Select strategically to minimize the number of steps taken.",
-        ["Jira", "Notifier","Summarizer"], // These are the worker names the supervisor will manage
+        ["Jira", "Notifier","Summarizer"], // These are the wrker names the supervisor will manage
     );
 
     return supervisorAgent;
